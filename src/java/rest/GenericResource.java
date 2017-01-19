@@ -74,20 +74,20 @@ public class GenericResource {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void insertarCliente (String cli) {
+    public boolean insertarCliente (String cli) {
          Conexion conexion = new Conexion();
          Gson gson = new Gson();
          Cliente cliente;
          cliente = gson.fromJson(cli, Cliente.class);
+         boolean result = true;
         try {
           
-            conexion.insertarCliente(cliente);
+            conexion.actualizarCliente(cliente);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-             
-            
+            result = false;             
         }
-        
+        return result;
     }
      
     @GET
@@ -111,37 +111,43 @@ public class GenericResource {
      
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-     public void actualizarCliente(String cli)
+     public boolean actualizarCliente(String cli)
      {
           Conexion conexion = new Conexion();
          Gson gson = new Gson();
          Cliente cliente;
          cliente = gson.fromJson(cli, Cliente.class);
+         boolean result = true;
         try {
           
-            conexion.actualizarCliente(cliente);
+            conexion.insertarCliente(cliente);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+            result = false;
+            
             
             
         }
+        return result;
      }
      
 @DELETE
 @Path("/delete/{id}")
  
   
-     public void eliminarCliente( @PathParam("id")int id)
+     public boolean eliminarCliente( @PathParam("id")int id)
      {
           Conexion conexion = new Conexion();
+          boolean result = true;
             
         try {
           
             conexion.eliminarCliente(id);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            
+            result = false;
             
         }
+        return result;
      }
 }

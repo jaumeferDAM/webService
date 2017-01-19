@@ -121,7 +121,7 @@ public List<Cliente> obtenerClientes() throws SQLException
      
   public boolean eliminarCliente(int id) throws SQLException
     {
-        boolean result;
+       
        String sql = "DELETE FROM cliente WHERE idcliente = ?";
        PreparedStatement stmt = connection.prepareStatement(sql);
        stmt.setInt(1, id);
