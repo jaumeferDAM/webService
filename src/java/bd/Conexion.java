@@ -26,7 +26,7 @@ public class Conexion {
     {
         try {
                 Class.forName("oracle.jdbc.driver.OracleDriver");
-                connection = DriverManager.getConnection("jdbc:oracle:thin:@192.168.180.10:1521:INSLAFERRERI", "PROFEA1","1234");
+                connection = DriverManager.getConnection("jdbc:oracle:thin:@192.168.180.10:1521:INSLAFERRERI", "fjaume","1234");
                // connection = DriverManager.getConnection("jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "PROFEA1","1234");
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
@@ -46,12 +46,12 @@ public class Conexion {
             connection.close();
         }
   
-        public  boolean insertarCliente(Cliente cli) throws SQLException
+        public  boolean insertarCliente(Autobus cli) throws SQLException
 {
-       String sql = "INSERT INTO Cliente (Nombre, Telefono) VALUES (?, ?)";
+       String sql = "INSERT INTO AUTOBUSLOGIN (MATRICULA, PASSWORD) VALUES (?, ?)";
        PreparedStatement stmt = connection.prepareStatement(sql);
-       stmt.setString(1, cli.getNombre()); //stmt.setString(1, cli.getNombre);
-       stmt.setInt(2, cli.getTelefono());
+       stmt.setString(1, cli.getMatricula()); //stmt.setString(1, cli.getNombre);
+       stmt.setString(2, cli.getPassword());
        int res = stmt.executeUpdate();
        finalizarConexion();
            
@@ -61,36 +61,36 @@ public class Conexion {
 
     
  
-public List<Cliente> obtenerClientes() throws SQLException
+public List<Autobus> obtenerAutobuses() throws SQLException
         
 {
       ResultSet rset;
-      List<Cliente> lista = new ArrayList();
-      String sql = "SELECT IdCliente, Nombre, Telefono FROM Cliente";
+      List<Autobus> lista = new ArrayList();
+      String sql = "SELECT Matricula, Password, fecha FROM AUTOBUSLOGIN";
       PreparedStatement stmt = getConnection().prepareStatement(sql);
       rset = stmt.executeQuery();
       while (rset.next())
       {
-          lista.add(new Cliente(rset.getInt("IdCliente"), rset.getString("Nombre"), rset.getInt("Telefono")));
+          lista.add(new Autobus(rset.getString("Matricula"), rset.getString("Password"), rset.getString("Fecha")));
           
       }
       finalizarConexion();
       return lista;
 }
  
-    public Cliente obtenerCliente (int id) throws SQLException
+    public Autobus obtenerAutobus (int id) throws SQLException
     {
-        Cliente cli = null;
+        Autobus cli = null;
         
       ResultSet rset;
       
-      String sql = "SELECT IdCliente, Nombre, Telefono FROM Cliente WHERE idCliente = ?";
+      String sql = "SELECT Matricula, Password, fecha FROM AUTOBUSLOGIN WHERE Matricula = ?";
       PreparedStatement stmt = getConnection().prepareStatement(sql);
       stmt.setInt(1, id);
       rset = stmt.executeQuery();
       while (rset.next())
       {
-          cli = new Cliente(rset.getInt("IdCliente"), rset.getString("Nombre"), rset.getInt("Telefono"));
+          cli = new Autobus(rset.getString("Matricula"), rset.getString("Password"), rset.getString("Fecha"));
           
       }
       finalizarConexion();
@@ -99,14 +99,14 @@ public List<Cliente> obtenerClientes() throws SQLException
         
     }
     
-    public boolean actualizarCliente(Cliente cli) throws SQLException
+    public boolean ActualizarAutobus(Autobus cli) throws SQLException
     {
         boolean result;
-          String sql = "UPDATE cliente SET nombre = ?, telefono = ? WHERE idcliente = ?";
+          String sql = "UPDATE AUTOBUSLOGIN SET Matricula = ?, Password = ? WHERE Matricula = ?";
        PreparedStatement stmt = connection.prepareStatement(sql);
-       stmt.setString(1, cli.getNombre()); //stmt.setString(1, cli.getNombre);
-       stmt.setInt(2, cli.getTelefono());
-       stmt.setInt(3, cli.getIdCliente());
+       stmt.setString(1, cli.getMatricula()); //stmt.setString(1, cli.getNombre);
+       stmt.setString(2, cli.getPassword());
+       stmt.setString(3, cli.getFecha());
        
        int res = stmt.executeUpdate();
        if (res==0)  
@@ -119,10 +119,10 @@ public List<Cliente> obtenerClientes() throws SQLException
     }
  
      
-  public boolean eliminarCliente(int id) throws SQLException
+  public boolean eliminarAutobus(int id) throws SQLException
     {
        
-       String sql = "DELETE FROM cliente WHERE idcliente = ?";
+       String sql = "DELETE FROM AUTOBUSLOGIN WHERE Matricula = ?";
        PreparedStatement stmt = connection.prepareStatement(sql);
        stmt.setInt(1, id);
        

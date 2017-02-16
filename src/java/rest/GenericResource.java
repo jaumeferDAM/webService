@@ -5,7 +5,7 @@
  */
 package rest;
 
-import bd.Cliente;
+import bd.Autobus;
 import bd.Conexion;
 import com.google.gson.Gson;
 import java.sql.SQLException;
@@ -18,7 +18,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
-import static javax.ws.rs.HttpMethod.POST;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
@@ -28,7 +27,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * REST Web Service
  *
- * @author Lluis_2
+ * @author 
  */
 @Path("generic")
 public class GenericResource {
@@ -50,13 +49,13 @@ public class GenericResource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String listarClientes ()
+    public String listarAutobuses ()
     {
         
         Conexion conexion = new Conexion();
-        List<Cliente> lista = null;
+        List<Autobus> lista = null;
         try {
-            lista = conexion.obtenerClientes();
+            lista = conexion.obtenerAutobuses();
             
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,19 +69,18 @@ public class GenericResource {
 
     /**
      * PUT method for updating or creating an instance of GenericResource
-     * @param content representation for the resource
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean insertarCliente (String cli) {
+    public boolean insertarAutobus (String cli) {
          Conexion conexion = new Conexion();
          Gson gson = new Gson();
-         Cliente cliente;
-         cliente = gson.fromJson(cli, Cliente.class);
+         Autobus autobus;
+         autobus = gson.fromJson(cli, Autobus.class);
          boolean result = true;
         try {
           
-            conexion.actualizarCliente(cliente);
+            conexion.ActualizarAutobus(autobus);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
             result = false;             
@@ -95,11 +93,11 @@ public class GenericResource {
      @Produces(MediaType.APPLICATION_JSON)
      public String mostrarCliente(@PathParam("id") int id)
      {
-         Cliente cli = null;
+         Autobus cli = null;
           Conexion conexion = new Conexion();
          try
          {
-             cli = conexion.obtenerCliente(id);
+             cli = conexion.obtenerAutobus(id);
          }
          catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,16 +109,16 @@ public class GenericResource {
      
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-     public boolean actualizarCliente(String cli)
+     public boolean ActualizarAutobus(String cli)
      {
           Conexion conexion = new Conexion();
          Gson gson = new Gson();
-         Cliente cliente;
-         cliente = gson.fromJson(cli, Cliente.class);
+         Autobus autobus;
+         autobus = gson.fromJson(cli, Autobus.class);
          boolean result = true;
         try {
           
-            conexion.insertarCliente(cliente);
+            conexion.insertarCliente(autobus);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
             result = false;
@@ -135,14 +133,14 @@ public class GenericResource {
 @Path("/delete/{id}")
  
   
-     public boolean eliminarCliente( @PathParam("id")int id)
+     public boolean eliminarAutobus( @PathParam("id")int id)
      {
           Conexion conexion = new Conexion();
           boolean result = true;
             
         try {
           
-            conexion.eliminarCliente(id);
+            conexion.eliminarAutobus(id);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
             result = false;
